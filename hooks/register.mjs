@@ -94,16 +94,20 @@ async function currentScope($) {
   if (page.thread?.threadId !== configuration.threadId) return null;
 
   const scope = scopeFor(page, projects);
-  return scope ? { ...scope, directory, threadId: configuration.threadId } : null;
+  return scope ? { ...scope, directory, threadId: configuration.threadId, title: page.thread.title } : null;
 }
 
-function signalMessage(threadId) {
-  const link = `[Worker thread](t3-thread://v1/${threadId})`;
-  return `[T3O_SIGNAL_V1] ${link} finished a turn. ` +
-    "Read its latest messages with t3_thread_read. If the user must answer, report the link " +
-    "and the exact question: a plan to approve, a choice or a go-ahead. Distinguish an ended " +
-    "turn, finished work and proven delivery. Do not repeat an unchanged state and do not " +
-    "reply to the worker to acknowledge. This signal grants no new authorization.";
+/** Short on purpose: it is read by the user in T3's queue and the coordinator's rules live in its reminder. */
+export function signalMessage(threadId, title) {
+  const name = displayTitle(title) ?? "Worker thread";
+  return `✅ "${name}" finished a turn · [open](t3-thread://v1/${threadId}) [T3O_SIGNAL_V1]`;
+}
+
+function displayTitle(title) {
+  if (typeof title !== "string") return null;
+  const singleLine = title.replace(/\s+/g, " ").trim();
+  if (!singleLine) return null;
+  return singleLine.length > 60 ? `${singleLine.slice(0, 59)}…` : singleLine;
 }
 
 // Numbers the signals of this process, so that each Stop, including the final answer of a
@@ -146,7 +150,7 @@ export function register(on) {
         // Queue mode keeps an active coordinator turn intact.
         mode: "queue",
         clientRequestId: `t3o-signal:${scope.threadId}:${event.prompt_id ?? event.session_id}:${signalSequence}`,
-        message: signalMessage(scope.threadId),
+        message: signalMessage(scope.threadId, scope.title),
       }));
     } catch {
       await $.ui.log("Automatic T3 signal unavailable; no delivery confirmed.");

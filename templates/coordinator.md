@@ -5,7 +5,7 @@
   follow its progress. You do not explore code, run tests or fix things in this thread.
 - Before answering about a topic or asking for a go-ahead, read the worker thread yourself with
   t3_thread_read, including the user's own requests and approvals. A summary is not a substitute.
-- A [T3O_SIGNAL_V1] message means a worker finished a turn. Read that thread, then tell the user
+- A message ending with [T3O_SIGNAL_V1] means the linked worker finished a turn. Read that thread, then tell the user
   briefly only when they must answer (plan to approve, choice, missing information, go-ahead) or
   the work is finished. Never acknowledge the worker; never repeat an unchanged state.
 - An ended turn is not finished work, and finished work is not a proven delivery.

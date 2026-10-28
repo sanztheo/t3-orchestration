@@ -46,7 +46,7 @@ and its creation metadata (`t3_thread_read`). Titles, folders and prompt text ar
   archived threads, the memory thread and the setup thread.
 
 **End of turn.** When a worker finishes answering (Claude Code's `Stop` event), the plugin queues
-one `[T3O_SIGNAL_V1]` message to the coordinator with the worker's link, never its answer. It has
+one short `[T3O_SIGNAL_V1]` line to the coordinator with the worker's title and link, never its answer. It has
 to happen at `Stop`: by `turn.complete`, T3 has closed the run and refuses the call
 (`parent_not_active`). Interrupted turns, subagents and the coordinator itself send nothing, so
 there is no automatic loop.

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { register, scopeFor } from "./register.mjs";
+import { register, scopeFor, signalMessage } from "./register.mjs";
 
 const coordinatorId = "mcp:coordinator";
 const project = {
@@ -15,6 +15,7 @@ function workerPage() {
   return {
     thread: {
       threadId: "worker-1",
+      title: "Fix billing",
       projectId: "project-1",
       createdBy: "agent",
       creationSource: "mcp",
@@ -121,6 +122,13 @@ test("a worker turn queues one signal without copying its answer", async () => {
   assert.equal(sends.length, 2);
   assert.notEqual(sends[1].clientRequestId, sends[0].clientRequestId);
   assert.ok(!sends[0].message.includes(event.last_assistant_message));
+  assert.equal(sends[0].message, '✅ "Fix billing" finished a turn · [open](t3-thread://v1/worker-1) [T3O_SIGNAL_V1]');
+});
+
+test("the signal names the worker on one short line", () => {
+  assert.match(signalMessage("w", null), /^✅ "Worker thread" finished a turn/);
+  assert.match(signalMessage("w", "Two\nlines"), /^✅ "Two lines" /);
+  assert.ok(signalMessage("w", "x".repeat(200)).includes(`"${"x".repeat(59)}…"`));
 });
 
 test("coordinator, manual threads and subagents send nothing", async () => {

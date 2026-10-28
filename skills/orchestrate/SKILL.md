@@ -43,7 +43,7 @@ substitutes. Never ask the user to confirm a decision they already stated.
 ### Receive a signal
 
 The plugin sends `[T3O_SIGNAL_V1]` to the coordinator at the end of each completed worker turn.
-It carries the worker link, never the worker's answer. Read the worker's latest messages, then:
+It carries the worker's title and link, never its answer. Read the worker's latest messages, then:
 
 - tell the user, briefly, with the link and the exact question when they must answer: a plan to
   approve, a choice, missing information or a go-ahead;
