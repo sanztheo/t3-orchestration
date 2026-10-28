@@ -11,8 +11,9 @@ value; otherwise stop and say so. Read the project entry: `projectId`, `excluded
 `coordinatorThreadId` and `libraryPath`.
 
 The memory thread maintains durable knowledge only. It never steers work, never relays between
-threads and never messages the coordinator. It changes no code, configuration, permissions,
-models or schedules; it runs no tests, builds or deployments, and creates no threads.
+threads and never messages the coordinator. Apart from the library, it edits only stale facts in
+the project's documentation and skills (see "Fix stale references"). It changes no code,
+configuration, permissions, global instructions, models or schedules; it runs no tests, builds or deployments, and creates no threads.
 
 All notes and collection state go through the bundled script, with the library path quoted:
 
@@ -99,6 +100,17 @@ Before writing, `search` the notes and pages on the same subject, then choose on
 - **replace**: the fact contradicts a note or page; a correction `supersedes` the old one, dated,
   with its reason, and the active page is fixed so two incompatible rules never coexist;
 - **skip**: already covered, one-off, or without future effect.
+
+### Fix stale references
+
+A note is not enough while an active file still states the old fact. For each durable fact
+confirmed or replaced during the pass, search the library and the project's documentation and
+skills (README, docs, `SKILL.md`, runbooks) for the old value, then:
+- check the source and the current state before editing;
+- correct an active reference that presents the old fact as current, or mark it as historical;
+- leave archives, journals, frozen evidence and generated views untouched;
+- never change code, configuration or global instructions: report such corrections in this thread
+  as out of scope, with the file and line.
 
 ### Write
 
