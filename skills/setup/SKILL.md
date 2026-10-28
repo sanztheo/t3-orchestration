@@ -51,7 +51,7 @@ projects is safe.
    - the project rules both roles must follow: repositories, guardrails (production, secrets,
      personal data), delivery process, review policy, language of replies. Keep them short: they
      are injected into every prompt;
-   - whether to enable long-term memory, and how often it runs (default every 30 minutes).
+   - whether to enable long-term memory, and how often it runs (default every 10 minutes).
 3. If `~/.t3-orchestration/config.json` already lists this `projectId` or `name`, stop and ask
    whether to replace it, instead of creating a second coordinator.
 

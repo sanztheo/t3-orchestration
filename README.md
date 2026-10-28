@@ -33,7 +33,7 @@ Three actors, and only one of them makes a judgement:
  you ──► Coordinator ──t3_thread_launch──► Worker A ─┐
               ▲                            Worker B ─┤  Stop event
               └──────── [T3O_SIGNAL_V1] ◄────────────┘  (queued, deduplicated)
- Memory thread ──every 30 min──► reads threads ──► notes + knowledge pages
+ Memory thread ──every 10 min──► reads threads ──► notes + knowledge pages
 ```
 
 **Who is who.** On every prompt the plugin asks T3 for the current thread (`t3_thread_configure`)
@@ -51,7 +51,7 @@ to happen at `Stop`: by `turn.complete`, T3 has closed the run and refuses the c
 (`parent_not_active`). Interrupted turns, subagents and the coordinator itself send nothing, so
 there is no automatic loop.
 
-**Memory.** A memory thread runs on a T3 schedule (every 30 minutes by default). Each pass reads
+**Memory.** A memory thread runs on a T3 schedule (every 10 minutes by default). Each pass reads
 the project's changed threads, records sourced notes with `scripts/memory.py` (SQLite, idempotent
 notes, `supersedes` for corrections, revision-checked state) and maintains knowledge pages in a
 library folder. It never messages other threads.
