@@ -105,7 +105,12 @@ Before writing, `search` the notes and pages on the same subject, then choose on
 
 A note is not enough while an active file still states the old fact. For each durable fact
 confirmed or replaced during the pass, search the library and the project's documentation and
-skills (README, docs, `SKILL.md`, runbooks) for the old value, then:
+skills (README, docs, `SKILL.md`, runbooks) for the old value. Search for real: the exact old
+value and its synonyms with `rg` across the project and its submodules, then `graphify query`
+from the project root when a `graphify-out/` exists, to reach the files that depend on the fact.
+For a wide search (several submodules or many files), you may start at most one sub-agent per
+pass, at low effort, with the fact, the old value and the folders to read; it reports file and
+line, the memory thread decides and edits. Then:
 - check the source and the current state before editing;
 - correct an active reference that presents the old fact as current, or mark it as historical;
 - leave archives, journals, frozen evidence and generated views untouched;
