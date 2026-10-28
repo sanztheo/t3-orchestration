@@ -50,9 +50,8 @@ Follow `POLICY.md` in the library: no secrets, personal data, raw transcripts or
    saved position, and new threads active since `activationAt`, with `t3_thread_read`. Read the user's requests and approvals, not only an
    agent's conclusion. Usual limit: 30 items per page, three pages per thread, five threads per
    pass; save a resume point when a read is incomplete.
-4. Keep decisions, reasons, contracts, useful incidents, durable results and artifacts, with date
-   and source. A pause, an ended turn or a running status is not knowledge. Search existing notes
-   before creating one.
+4. Apply "What deserves a note" below, with date and source. Search existing notes before
+   creating one.
 5. A source is the exact thread link returned by T3, with the message position. Distinguish an
    explicit user decision, an agent's account, an assumption and a verified fact. When a cited
    link is wrong, search for the real thread before declaring the evidence missing. An approval
@@ -63,6 +62,33 @@ Follow `POLICY.md` in the library: no secrets, personal data, raw transcripts or
    the note pending and say why in this thread.
 7. Save receipts before moving cursors, with the current revisions. Only acknowledge a position
    for the part fully read. An error keeps the previous cursor.
+
+## What deserves a note
+
+A note must move the project forward or prevent redoing work. One test: would an agent discovering
+this project in a month act differently, or avoid asking again or rediscovering something,
+thanks to it? If not, record nothing. A pass with no note is a normal result.
+
+Keep:
+- the user's decisions and preferences that hold beyond the current thread, with their reason
+  (product rules, how they want work done, delivered or reported);
+- costly pitfalls: a constraint of an API or tool, an identified bug, the root cause and fix of
+  an incident, a dead end not to try again;
+- contracts and invariants discovered, procedures that worked, where artifacts live;
+- any correction of earlier knowledge (`supersedes`).
+
+Skip:
+- a go-ahead, an "ok" or an approval that only covers one task or batch ("go for these 6
+  threads", "ship it"): it is used once and stays in its thread. Only a general rule it states,
+  if any, is worth a note;
+- progress: thread creation, statuses, ended turns, a pull request number or a count on its own,
+  temporary plans;
+- an agent's account with no user decision or verified fact, acknowledgements;
+- what the code, Git history or docs already say, and what an existing note covers: enrich or
+  correct that note instead of adding a neighbour.
+
+Prefer one consolidated note per subject to several small ones. State the rule and its reason,
+not the history of the exchange.
 
 ## End of pass
 
