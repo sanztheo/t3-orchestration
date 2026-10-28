@@ -16,6 +16,8 @@ you when you must answer: a plan to approve, a choice, a go-ahead, or finished w
 - 🔔 **Automatic end-of-turn notifications** from workers to the coordinator, no polling, no loops.
 - 🎯 **Precise role detection** from T3's native metadata: manual threads are never touched.
 - 🧠 **Long-term memory** on a schedule: sourced notes, corrections, knowledge pages, SQLite.
+- 🔀 **Several Claude accounts**: before opening a worker, the coordinator checks each account's
+  session and weekly usage and picks the one to drain first.
 - ⚙️ **One-command setup** with a Claude Code skill: `/t3-orchestration:setup`.
 - 🔒 No API keys, no server, no telemetry. Everything stays on your machine.
 
@@ -50,6 +52,13 @@ one short `[T3O_SIGNAL_V1]` line to the coordinator with the worker's title and 
 to happen at `Stop`: by `turn.complete`, T3 has closed the run and refuses the call
 (`parent_not_active`). Interrupted turns, subagents and the coordinator itself send nothing, so
 there is no automatic loop.
+
+**Several accounts.** Give each Claude account its own T3 Claude instance (a separate
+`CLAUDE_CONFIG_DIR`, same `--plugin-dir`). `scripts/accounts.mjs` reads them from T3's settings,
+asks each one for its plan usage through the Claude Agent SDK (no prompt sent, no usage spent)
+and recommends the emptiest account that can still work, so quota left before a reset is used
+instead of lost. The coordinator runs it before each launch. It switches accounts between
+threads, not inside a running thread, and it does not proxy or share credentials.
 
 **Memory.** A memory thread runs on a T3 schedule (every 10 minutes by default). Each pass reads
 the project's changed threads, records sourced notes with `scripts/memory.py` (SQLite, idempotent
@@ -112,6 +121,7 @@ skills/setup/                install, add a project, update, uninstall
 skills/orchestrate/          coordinator and worker rules
 skills/memory/               one incremental memory pass
 scripts/memory.py            notes and collection state of a library
+scripts/accounts.mjs         usage of each Claude account, and which one to use next
 templates/                   reminders and library pages filled in by setup
 config.example.json          shape of ~/.t3-orchestration/config.json
 llms.txt                     summary for AI assistants and search engines
@@ -132,12 +142,16 @@ llms.txt                     summary for AI assistants and search engines
 - **T3 tool names.** The plugin relies on the `t3-code` MCP tools listed in
   `skills/setup/SKILL.md`, as available in T3 Code in October 2026. If T3 renames them, the
   plugin stays silent.
+- **Account usage** comes from the Claude Agent SDK's experimental usage API, the one T3 uses for
+  its own usage panel. If it changes, the script reports usage as unknown and the coordinator
+  keeps its default account.
 - Threads already running load the plugin only after a restart.
 
 ## Development
 
 ```bash
-node --test hooks/register.test.mjs
+npm install
+node --test hooks/register.test.mjs scripts/accounts.test.mjs
 python3 scripts/test_memory.py
 claude plugin validate .
 ```

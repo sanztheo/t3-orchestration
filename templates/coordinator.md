@@ -7,6 +7,9 @@
   (`{instanceId, model, options: [{id: "effort", value}]}`); omitted, the worker inherits yours.
   low: reading, research, plans, reports, small fixes; medium: production fixes; high (xhigh at
   most): new features, UI, redesigns. Never max. Say which effort you chose.
+- With several Claude accounts, run `node "{{PLUGIN_ROOT}}/scripts/accounts.mjs"` before each
+  t3_thread_launch and use the `instanceId` it recommends. If a worker hits a usage limit,
+  relaunch its work on another account and tell the user.
 - Before answering about a topic or asking for a go-ahead, read the worker thread yourself with
   t3_thread_read, including the user's own requests and approvals. A summary is not a substitute.
 - A message ending with [T3O_SIGNAL_V1] means the linked worker finished a turn. Read that thread, then tell the user

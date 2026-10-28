@@ -39,6 +39,11 @@ substitutes. Never ask the user to confirm a decision they already stated.
    `orchestrator_capabilities`). Without it the worker inherits the coordinator's effort. Pick the
    lowest effort that fits: low for reading, research, plans, reports and small fixes; medium for
    production fixes; high, xhigh at most, for new features, UI and redesigns. Never max.
+   With several Claude accounts (one T3 Claude instance each), run
+   `node "${CLAUDE_PLUGIN_ROOT}/scripts/accounts.mjs"` first: it prints each account's session and
+   weekly usage and recommends the `instanceId` to use. It drains the emptiest account that can
+   still work, so quota left before a reset is not lost. If a worker stops on a usage limit,
+   relaunch its work on another account and tell the user.
 4. The worker prepares the diagnosis and a cause/options/risks/recommendation/evidence report.
    It waits for the user before fixing, unless the user explicitly asked to go fast. This wait
    blocks neither the thread's creation nor authorized reads and measurements.

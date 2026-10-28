@@ -10,6 +10,7 @@ Repository: https://github.com/sanztheo/t3-orchestration
 - Role detection from T3's native thread metadata: a worker is a thread whose first message was sent by the coordinator through MCP. Manual threads are never affected.
 - Reminder injection per role through the Claude Code mods `prompt.submit` event.
 - End-of-turn signal through the `classic.Stop` event and T3's `t3_thread_send` MCP tool (queued, one per answer, no automatic loop). `turn.complete` cannot be used: T3 refuses calls once the run is closed (`parent_not_active`).
+- Several Claude accounts: `scripts/accounts.mjs` reads each T3 Claude instance's plan usage (Claude Agent SDK, no prompt sent) and recommends the emptiest account that can still work before each worker launch.
 - Long-term memory: `scripts/memory.py` (SQLite notes, publish, supersedes, revision-checked state) driven by a T3 scheduled task.
 
 ## Install

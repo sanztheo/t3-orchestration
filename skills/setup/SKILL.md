@@ -65,12 +65,17 @@ returned `threadId` and `link`. Suggest the user pins it.
 
 1. Create `~/.t3-orchestration/projects/<name>/`.
 2. Fill `${CLAUDE_PLUGIN_ROOT}/templates/coordinator.md` and `worker.md`: replace
-   `{{PROJECT_NAME}}`, `{{COORDINATOR_THREAD_ID}}` and `{{PROJECT_RULES}}` (a short bullet list).
+   `{{PROJECT_NAME}}`, `{{COORDINATOR_THREAD_ID}}`, `{{PLUGIN_ROOT}}` (the plugin directory) and `{{PROJECT_RULES}}` (a short bullet list).
    Write them as `coordinator.md` and `worker.md` in that directory.
-3. With memory: copy `${CLAUDE_PLUGIN_ROOT}/templates/library/` to `library/`, replacing
+3. Multiple Claude accounts (optional): each account is its own T3 Claude instance with its own
+   `homePath` (a separate `CLAUDE_CONFIG_DIR`, logged in with
+   `CLAUDE_CONFIG_DIR=<dir> claude auth login`) and the same `--plugin-dir`. Run
+   `npm install --prefix "${CLAUDE_PLUGIN_ROOT}"` once, then check
+   `node "${CLAUDE_PLUGIN_ROOT}/scripts/accounts.mjs"` lists every account.
+4. With memory: copy `${CLAUDE_PLUGIN_ROOT}/templates/library/` to `library/`, replacing
    `{{PROJECT_NAME}}`, then run
    `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/memory.py" --library "<library path>" status`.
-4. Back up `config.json` if it exists, then add this project to `projects`, keeping the others
+5. Back up `config.json` if it exists, then add this project to `projects`, keeping the others
    (see `${CLAUDE_PLUGIN_ROOT}/config.example.json`). `excludedThreadIds` holds this setup thread's
    id; `memoryThreadId` stays `null` until step 5; `libraryPath` is absolute, or `null`.
 
@@ -104,7 +109,8 @@ Report what was created, with the exact links, and what remains unverified.
    `git -C "${CLAUDE_PLUGIN_ROOT}" pull --ff-only`. Stop on any conflict or local change.
 2. Show `git log` and the diff of `templates/` between the two commits. The user's reminder files
    are theirs: propose the template changes, never overwrite them.
-3. New threads load the new version; ask the user to restart the threads already running.
+3. Run `npm install --prefix "${CLAUDE_PLUGIN_ROOT}"` if `package.json` changed.
+4. New threads load the new version; ask the user to restart the threads already running.
 
 ## Uninstall
 
