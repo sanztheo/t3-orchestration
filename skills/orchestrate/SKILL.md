@@ -34,6 +34,11 @@ substitutes. Never ask the user to confirm a decision they already stated.
    message comes from you: that is what makes the plugin treat it as a worker. A thread you only
    message later stays a manual thread. Give a self-contained brief: source, context, observable
    result, files and docs, model and effort, guardrails, expected evidence and delivery boundary.
+   Set the model and effort in the launch itself, not only in the brief: `modelSelection` with
+   `instanceId`, `model` and `options: [{id: "effort", value}]` (values from
+   `orchestrator_capabilities`). Without it the worker inherits the coordinator's effort. Pick the
+   lowest effort that fits: low for reading, research, plans, reports and small fixes; medium for
+   production fixes; high, xhigh at most, for new features, UI and redesigns. Never max.
 4. The worker prepares the diagnosis and a cause/options/risks/recommendation/evidence report.
    It waits for the user before fixing, unless the user explicitly asked to go fast. This wait
    blocks neither the thread's creation nor authorized reads and measurements.
