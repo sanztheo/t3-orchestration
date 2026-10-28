@@ -87,8 +87,31 @@ Skip:
 - what the code, Git history or docs already say, and what an existing note covers: enrich or
   correct that note instead of adding a neighbour.
 
-Prefer one consolidated note per subject to several small ones. State the rule and its reason,
-not the history of the exchange.
+Keep only what cannot be derived: what the code, Git history, CLAUDE.md or the active pages do
+not already say (a decision, its reason, a pitfall, a convention that differs from the default).
+
+### Decide for each fact kept
+
+Before writing, `search` the notes and pages on the same subject, then choose one action:
+- **add**: the subject exists nowhere;
+- **complete**: same subject, new or more precise information; keep the most complete wording and
+  fix the active page rather than adding a neighbouring note;
+- **replace**: the fact contradicts a note or page; a correction `supersedes` the old one, dated,
+  with its reason, and the active page is fixed so two incompatible rules never coexist;
+- **skip**: already covered, one-off, or without future effect.
+
+### Write
+
+- One note, one subject, phrased as a precise, actionable rule or fact ("check X before Y"),
+  followed by its reason and source; not a narrative of the exchange.
+- Date the fact. If it depends on a version, a state or a deadline, say so ("valid while…") so a
+  later pass re-checks or replaces it.
+- Keep `MEMORY.md` short: one line per page, details in topic pages; merge or remove stale entries
+  met during the pass.
+
+References: Claude Code auto memory (code.claude.com/docs/en/memory), Anthropic's memory tool,
+Mem0 (arXiv 2504.19413, ADD/UPDATE/DELETE/NONE decisions), Graphiti's temporal invalidation
+(arXiv 2501.13956).
 
 ## End of pass
 
