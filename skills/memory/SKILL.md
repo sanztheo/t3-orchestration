@@ -29,10 +29,13 @@ with the revision just read by `state-get`.
 
 ## Scope
 
-Read threads of `projectId` only, with the native T3 tools, never T3's databases. Skip every id in
-`excludedThreadIds` and the memory thread itself before reading. The coordinator and ordinary
-worker threads are sources. Follow `POLICY.md` in the library: no secrets, personal data, raw
-transcripts or audio.
+Read threads of `projectId` only, with the native T3 tools, never T3's databases. Pass that
+`projectId` explicitly to `t3_thread_list`: the memory thread may live in another project, and the
+current project is never the default scope. Skip every id in `excludedThreadIds` and the memory
+thread itself before reading; read one of them only when the user explicitly asks to check a
+specific source there, and that does not add it back to the collection. Ordinary worker threads
+are sources. The coordinator is a source read on every pass (see step 3), never a correspondent.
+Follow `POLICY.md` in the library: no secrets, personal data, raw transcripts or audio.
 
 ## Incremental pass
 
@@ -41,17 +44,22 @@ transcripts or audio.
    `activationAt` = now and collects nothing older unless the user asked for a backfill.
 2. List the project's threads with `includeSubagents: false`, 100 per page, five pages at most;
    apply the exclusions before any read.
-3. Read the threads changed since their saved position, and new threads active since
-   `activationAt`, with `t3_thread_read`. Read the user's requests and approvals, not only an
+3. Read the coordinator thread directly by its id (`coordinatorThreadId`) from its saved position
+   on every pass, even when the listing does not show it: it may live outside the project, and it
+   holds most of the user's requests and decisions. Then read the threads changed since their
+   saved position, and new threads active since `activationAt`, with `t3_thread_read`. Read the user's requests and approvals, not only an
    agent's conclusion. Usual limit: 30 items per page, three pages per thread, five threads per
    pass; save a resume point when a read is incomplete.
 4. Keep decisions, reasons, contracts, useful incidents, durable results and artifacts, with date
    and source. A pause, an ended turn or a running status is not knowledge. Search existing notes
    before creating one.
 5. A source is the exact thread link returned by T3, with the message position. Distinguish an
-   explicit user decision, an agent's account, an assumption and a verified fact.
+   explicit user decision, an agent's account, an assumption and a verified fact. When a cited
+   link is wrong, search for the real thread before declaring the evidence missing. An approval
+   the user already gave explicitly is recorded as such, never asked again.
 6. `record` the notes, check them, then `publish`. A correction uses `supersedes`. Update the
-   knowledge pages concerned and their links in `MEMORY.md`. When evidence is insufficient, keep
+   knowledge pages concerned and their links in `MEMORY.md`: a published note is not enough while
+   an active page still states a rule it contradicts. When evidence is insufficient, keep
    the note pending and say why in this thread.
 7. Save receipts before moving cursors, with the current revisions. Only acknowledge a position
    for the part fully read. An error keeps the previous cursor.
@@ -61,4 +69,5 @@ transcripts or audio.
 Answer briefly in the memory thread: notes and pages updated, missing sources, partial
 collection. Send nothing to any other thread. A pass ends after its scope; it starts no timer.
 The schedule that triggers passes is owned by the memory thread and changes only on the user's
-explicit request.
+explicit request. Keep the model and effort the user configured, and do not archive or file the
+memory thread.
