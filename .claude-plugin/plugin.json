@@ -1,0 +1,10 @@
+{
+  "name": "t3-orchestration",
+  "displayName": "T3 Orchestration",
+  "version": "0.1.0",
+  "description": "A coordinator thread, worker threads that report back automatically, and an optional long-term memory, for Claude Code inside T3 Code.",
+  "author": { "name": "sanztheo", "url": "https://github.com/sanztheo" },
+  "repository": "https://github.com/sanztheo/t3-orchestration",
+  "license": "MIT",
+  "keywords": ["t3code", "orchestration", "multi-agent", "memory", "mods"]
+}

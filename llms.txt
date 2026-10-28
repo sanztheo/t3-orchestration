@@ -1,0 +1,30 @@
+# t3-orchestration
+
+> Open-source (MIT) Claude Code plugin for T3 Code. A coordinator thread opens one worker thread per topic; each worker automatically notifies the coordinator when it finishes answering; an optional scheduled memory thread keeps sourced long-term project knowledge. No API key, no server.
+
+Repository: https://github.com/sanztheo/t3-orchestration
+
+## What it does
+
+- Coordinator / worker multi-agent workflow inside T3 Code (https://github.com/pingdotgg/t3code).
+- Role detection from T3's native thread metadata: a worker is a thread whose first message was sent by the coordinator through MCP. Manual threads are never affected.
+- Reminder injection per role through the Claude Code mods `prompt.submit` event.
+- End-of-turn signal through the `classic.Stop` event and T3's `t3_thread_send` MCP tool (queued, one per answer, no automatic loop). `turn.complete` cannot be used: T3 refuses calls once the run is closed (`parent_not_active`).
+- Long-term memory: `scripts/memory.py` (SQLite notes, publish, supersedes, revision-checked state) driven by a T3 scheduled task.
+
+## Install
+
+1. `git clone https://github.com/sanztheo/t3-orchestration.git`
+2. Add `--plugin-dir <absolute path>` to the Claude provider's launch arguments in T3 Code.
+3. In a new Claude thread of the project, run `/t3-orchestration:setup`.
+
+## Docs
+
+- [README](https://github.com/sanztheo/t3-orchestration/blob/main/README.md): how it works, FAQ, limits
+- [Setup skill](https://github.com/sanztheo/t3-orchestration/blob/main/skills/setup/SKILL.md): install, add a project, update, uninstall
+- [Orchestrate skill](https://github.com/sanztheo/t3-orchestration/blob/main/skills/orchestrate/SKILL.md): coordinator and worker rules
+- [Memory skill](https://github.com/sanztheo/t3-orchestration/blob/main/skills/memory/SKILL.md): incremental memory pass
+
+## Limits
+
+Claude Code only (not Codex); best effort, no retries; failed turns (StopFailure) send no signal; settings-hook events do not run in mods under Claude Code's managed-organisation guard.

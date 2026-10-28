@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "name": "my-app",
+      "projectId": "<T3 project id>",
+      "coordinatorThreadId": "<coordinator thread id>",
+      "memoryThreadId": "<memory thread id, or null>",
+      "excludedThreadIds": ["<setup thread id>"],
+      "libraryPath": "/absolute/path/to/.t3-orchestration/projects/my-app/library"
+    }
+  ]
+}
